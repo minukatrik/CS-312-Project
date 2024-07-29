@@ -1,6 +1,15 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-family: Arial, sans-serif;
+}
+
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
     background-color: #f0f0f0;
 }
 
@@ -44,7 +53,7 @@ body {
 }
 
 .details {
-    height: 200px;
+    height: auto;
 }
 
 .details-content {
@@ -52,25 +61,50 @@ body {
 }
 
 .add-expense {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.add-expense form {
+  position: relative;
+  width: 480px;
+  margin: 30px auto 20px auto;
+  background: #fff;
+  padding: 20px;
+  border-radius: 7px;
+  box-shadow: 0 1px 5px rgb(138, 137, 137);
+}
+
+.add-expense input,
+.add-expense textarea {
+  width: 100%;
+  border: none;
+  padding: 4px;
+  outline: none;
+  font-size: 1.2em;
+  font-family: inherit;
+  resize: none;
 }
 
 .add-expense button {
+    position: absolute;
+    float: right;
+    right: 18px;
+    bottom: -27px;
     background-color: #4CAF50;
     color: white;
     border: none;
     padding: 10px 20px;
     cursor: pointer;
-    border-radius: 8px;
+    border-radius: 50%;
 }
 
-.add-expense button:hover {
+/* .addExpense button:hover {
     background-color: #45a049;
-}
+} */
 
 .budget {
     display: flex;
@@ -93,4 +127,19 @@ img {
     width: 100%;
     height: auto;
     border-radius: 8px;
+}
+
+.item {
+  background: #4CAF50;
+  border-radius: 7px;
+  box-shadow: 0 2px 5px #ccc;
+  padding: 10px;
+  width: 240px;
+  margin: 16px;
+  float: left;
+}
+
+.item h1, p {
+  font-size: 1.1em;
+  color: #fff;
 }
