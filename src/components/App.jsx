@@ -1,4 +1,3 @@
-// Imports
 import React, { useState } from "react";
 import Header from "./Header.jsx";
 import Detail from "./Detail.jsx";
@@ -6,53 +5,44 @@ import Expense from "./Expense.jsx";
 import Image from "./Image.jsx";
 import Budget from "./Budget.jsx";
 
-
-// The App function returns a "container" of components of the website
 function App() {
+  const [exps, setExps] = useState([]);
+  const [expenseToEdit, setExpenseToEdit] = useState(null);
 
+  const addExpense = (newExp) => {
+    setExps((prevExps) => [...prevExps, newExp]);
+    setExpenseToEdit(null); // Reset edit state
+  };
 
+  const updateExpense = (updatedExp) => {
+    setExps((prevExps) =>
+      prevExps.map((exp, index) =>
+        index === expenseToEdit.index ? updatedExp : exp
+      )
+    );
+    setExpenseToEdit(null); // Reset edit state
+  };
 
-  // Constants
-  const [ exps, setExps ] = useState([]);
+  const deleteExpense = (id) => {
+    setExps((prevExps) => prevExps.filter((_, index) => index !== id));
+  };
 
+  const handleEdit = (index) => {
+    setExpenseToEdit({
+      ...exps[index],
+      index
+    });
+  };
 
-
-  // Nested functions
-
-    // The addExpense function returns a new array with new expense
-    function addExpense( newExp ) {
-      setExps( prevExps => {
-        return [ ...prevExps, newExp ];
-      });
-    }
-
-    // The deleteExpense function returns new array without the deleted expense
-    function deleteExpense( id ) {
-      setExps( prevExps => {
-        return prevExps.filter( ( expItem, index ) => {
-          return index !== id;
-        });
-      });
-    }
-
-
-
-  // Return container of all sections of website
   return (
     <div className="container">
       <Header />
-      <Detail
-        exps={ exps }
-        onDelete={ deleteExpense }
-      />
-      <Expense onAdd={ addExpense } />
+      <Detail exps={exps} onDelete={deleteExpense} onEdit={handleEdit} />
+      <Expense onAdd={addExpense} expenseToEdit={expenseToEdit} onUpdate={updateExpense} />
       <Image />
       <Budget />
     </div>
   );
 }
 
-
-
-// Export function
 export default App;

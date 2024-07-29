@@ -143,3 +143,16 @@ img {
   font-size: 1.1em;
   color: #fff;
 }
+
+.category-group {
+  margin-bottom: 20px;
+}
+
+.category-group h4 {
+  font-size: 1.2em;
+  margin-bottom: 10px;
+}
+
+.item {
+  margin-bottom: 10px;
+}
