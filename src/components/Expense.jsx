@@ -57,8 +57,12 @@ function Expense( props ) {
       // Remove white space
       const isWhitespaceString = str => !str.replace(/\s/g, '').length
 
-      // If string is not just white space or not a known category
-      if ( exp.title !== "Other" && !isWhitespaceString( exp.title ) || exp.title === "Other" && !isWhitespaceString( exp.newTitle ) ) {
+      console.log( exp );
+
+      // If user filled in required fields
+      if ( ( exp.title !== "" && exp.title !== "Other" || exp.title === "Other" &&
+         !isWhitespaceString( exp.newTitle ) ) && Number( exp.amount ) !== 0 &&
+         exp.date !== "" ) {
 
         // Add expense
         props.onAdd( exp );
@@ -78,8 +82,8 @@ function Expense( props ) {
       // Else
       else {
 
-        // Alert user to enter title
-        alert( "Please enter an expense category." );
+        // Alert user to enter required fields
+        alert( "Please enter required fields" );
       }
     }
 
