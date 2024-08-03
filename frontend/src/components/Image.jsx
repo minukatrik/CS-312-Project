@@ -3,21 +3,32 @@ import React from "react";
 
 
 
-// The Image function ...
-function Image() {
+// React component for displaying graphs showing expenses by category.
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from "recharts";
+
+const Image = () => {
+  // Sample data for expenses by category
+  const data = [
+    { category: "Food", amount: 500 },
+    { category: "Rent", amount: 1000 },
+    { category: "Transportation", amount: 300 },
+    { category: "Entertainment", amount: 200 },
+    { category: "Utilities", amount: 400 },
+  ];
+
   return (
-    <div className="section grid-container">
-        <div className="grid-item">Image 1 <img src="placeholder.png" alt="Placeholder Image"></img></div>
-        <div className="grid-item">image 2 <img src="placeholder.png" alt="Placeholder Image"></img></div>
-        <div className="grid-item">image 3 <img src="placeholder.png" alt="Placeholder Image"></img></div>
-        <div className="grid-item">image 4 <img src="placeholder.png" alt="Placeholder Image"></img></div>
-        <div className="grid-item">image 5 <img src="placeholder.png" alt="Placeholder Image"></img></div>
-        <div className="grid-item">image 6 <img src="placeholder.png" alt="Placeholder Image"></img></div>
+    <div>
+      <h2>Expenses by Category</h2>
+      <BarChart width={500} height={300} data={data}>
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis dataKey="category" />
+        <YAxis />
+        <Tooltip />
+        <Legend />
+        <Bar dataKey="amount" fill="#8884d8" />
+      </BarChart>
     </div>
   );
-}
+};
 
-
-
-// Export function
 export default Image;
