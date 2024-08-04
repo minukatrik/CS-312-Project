@@ -52,11 +52,116 @@
       .then( data => res.send( data ) );
   });
 
+
+
   app.get( "/api/expenses", ( req, res ) => {
     Expense
       .find()
       .then( data => res.send( data ) );
-  })
+  });
+
+
+
+  // app.get( "/api/total", ( req, res ) => {
+  //
+  //   let idx, total = 0;
+  //
+  //   Expense
+  //     .find()
+  //     .then( data => {
+  //       for ( idx = 0; idx < data.length; idx++ ) {
+  //         total += data[ idx ].amount;
+  //       }
+  //       res.json( total );
+  //     });
+  // });
+  //
+  //
+  //
+  // app.get( "/api/categoryTotals", ( req, res ) => {
+  //   let idx, result, titleIdx, summary = [];
+  //
+  //   Expense
+  //     .find()
+  //     .then( data => {
+  //       for ( idx = 0; idx < data.length; idx++ ) {
+  //         result = summary.find( item => item.title === data[ idx ].title );
+  //
+  //         if ( result === undefined ) {
+  //           summary.push({
+  //             title: data[ idx ].title,
+  //             amount: data[ idx ].amount
+  //           });
+  //         }
+  //
+  //         else {
+  //           titleIdx = summary.findIndex( item => item.title === data[ idx ].title );
+  //           summary[ titleIdx ].amount += data[ idx ].amount;
+  //         }
+  //       }
+  //       res.send( summary );
+  //     });
+  // });
+  //
+  //
+  // app.get( "/api/ade", ( req, res ) => {
+  //   const avgDays = 30.4;
+  // });
+
+
+  app.get( "/api/monthly", ( req, res ) => {
+
+    let monthIdx, idx, result, date, monthly = [];
+    const months = [ "January", "February", "March", "April", "May", "June",
+             "July", "August", "September", "October", "November", "December" ];
+    const avgDays = 30.4;
+
+    for ( monthIdx = 0; monthIdx < months.length; monthIdx++ ) {
+      monthly.push({
+        month: months[ monthIdx ],
+        totalSpending: 0,
+        avgDailySpending: 0,
+        categoryTotals: []
+      });
+    }
+
+    Expense
+      .find()
+      .then( data => {
+        for ( idx = 0; idx < data.length; idx++ ) {
+
+          date = data[ idx ].date;
+
+          splitDate = date.split("-");
+
+          monthIdx = splitDate[ 1 ] - 1;
+
+          monthly[ monthIdx ].totalSpending += data[ idx ].amount;
+
+          result = monthly[ monthIdx ].categoryTotals.find( item => item.title === data[ idx ].title );
+
+          if ( result === undefined ) {
+            monthly[ monthIdx ].categoryTotals.push({
+              title: data[ idx ].title,
+              amount: data[ idx ].amount
+            });
+          }
+
+          else {
+            titleIdx = monthly[ monthIdx ].categoryTotals.findIndex( item => item.title === data[ idx ].title );
+            monthly[ monthIdx ].categoryTotals[ titleIdx ].amount += data[ idx ].amount;
+          }
+        }
+
+        for ( monthIdx = 0; monthIdx < months.length; monthIdx++ ) {
+          monthly[ monthIdx ].avgDailySpending = monthly[ monthIdx ].totalSpending / avgDays;
+        }
+
+        res.send( monthly );
+
+      });
+  });
+
 
 // Post methods
 
@@ -83,7 +188,14 @@
 
  app.post( "/delete", ( req, res ) => {
 
-    Expense.findByIdAndDelete( req.body._id )
+   const { title, amount, date, description } = req.body;
+
+    Expense.findOneAndDelete({
+      title: title,
+      amount: amount,
+      date: date,
+      description: description
+    })
       .catch( err => console.log( err ) );
   });
 // app.delete('/delete/:id', async(req,res) =>{

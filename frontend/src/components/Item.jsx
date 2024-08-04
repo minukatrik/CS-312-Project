@@ -9,7 +9,7 @@ function Item( props ) {
   // Nested function
 
     // The handleDelete function calls a function to delete an expense
-    const handleClick = () =>{
+    const handleClick = () => {
 
       fetch( 'http://localhost:8080/delete', {
         method: "POST",
@@ -17,9 +17,10 @@ function Item( props ) {
         body: JSON.stringify( props )
       })
         .then( res => res.json() )
-        // .then(() => {
-        //   props.onDelete(props.index);
-        // })
+        .then( data => {
+          // console.log( data );
+          // props.onDelete( props.index )
+        })
         .catch( err => console.log( err ) );
 
       props.onDelete( props.index );

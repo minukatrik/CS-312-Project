@@ -6,9 +6,10 @@ import Item from "./Item.jsx";
 
 // The Detail function returns the detail section of the website
 function Detail( props ) {
+
   return (
     <div className="section details">
-        <h3>Details</h3>
+        <h3>Expenses</h3>
         <div className="details-content">
           { props.exps.map( ( expItem, index ) => {
             return (

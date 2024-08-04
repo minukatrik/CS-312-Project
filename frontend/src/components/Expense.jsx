@@ -17,7 +17,6 @@ function Expense( props ) {
   const [ categories, setCategories ] = useState([]);
   const [ isCategory, setIsCategory ] = useState( true );
   const [ exp, setExp ] = useState({
-    _id: "",
     title: "",
     amount: "",
     date: "",
@@ -56,28 +55,34 @@ function Expense( props ) {
       const { title, amount, date, description } = exp;
 
       // If user filled in required fields
-      if ( ( !isWhitespaceString( title ) ) && Number( amount ) !== 0
+      if ( !isWhitespaceString( title ) && Number( amount ) >= 0
              && date !== "" ) {
 
+        if ( !categories.includes( title ) ) {
+          setCategories( prevCats => {
+            setIsCategory( true );
+            return [
+              ...prevCats,
+              title
+            ];
+          });
+        }
+
+        console.log( categories );
 
         fetch( 'http://localhost:8080/submit', {
           method: "POST",
           headers: { "Content-type": "application/json" },
           body: JSON.stringify( exp )
-        })
-          .then( res => res.json() )
-          .then( data => {
-            setExp( data );
-            console.log( data );
-            console.log( exp );
-          });
+        });
+          // .then( res => res.json() )
+          // .then( data => setExp( data ) );
 
           // Add expense
           props.onAdd( exp );
 
           // Reset text input
           setExp({
-            _id: "",
             title: "",
             amount: "",
             date: "",
@@ -85,15 +90,13 @@ function Expense( props ) {
           });
 
         event.preventDefault();
-        window.location.reload();
-
       }
 
       // Else
       else {
 
         // Alert user to enter required fields
-        alert( "Please enter required fields" );
+        alert( "Please correctly enter required fields" );
       }
     }
 
@@ -103,7 +106,9 @@ function Expense( props ) {
 
       // Determine if it's a new category
       if ( checked ) {
-        setExp( { title: "" } );
+        setExp({
+          ...exp,
+          title: "" } );
         setIsCategory( false );
       }
       else {

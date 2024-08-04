@@ -16,27 +16,30 @@ function App() {
   const [ exps, setExps ] = useState([]);
 
 
+
   useEffect( () => {
     fetch( "/api/expenses", {
       "method": "GET"
     })
       .then( res => res.json() )
-      .then( data => setExps( data ) );
+      .then( data => setExps( data ) )
+      .catch( err => console.log( err ) );
   }, [] );
+
 
 
   // Nested functions
 
     // The addExpense function returns a new array with new expense
     function addExpense( newExp ) {
-      setExps( prevExps => {
-        return [ ...prevExps, newExp ];
-      });
+      setExps( prevExps => [ ...prevExps, newExp ] );
     }
+
+
 
     // The deleteExpense function returns new array without the deleted expense
     function deleteExpense( idx ) {
-      setExps( prevExps => prevExps.filter( ( expItem, index ) => index !== idx));
+      setExps( prevExps => prevExps.filter( ( expItem, index ) => index !== idx ) );
     };
 
 
@@ -50,7 +53,7 @@ function App() {
         onDelete={ deleteExpense }
       />
       <Expense onAdd={ addExpense } />
-      <Image />
+
       <Budget />
     </div>
   );
