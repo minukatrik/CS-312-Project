@@ -1,10 +1,10 @@
 // Imports
 import React, { useEffect, useState } from "react";
 import Header from "./Header.jsx";
-import Detail from "./Detail.jsx";
-import Expense from "./Expense.jsx";
-import Image from "./Image.jsx";
-import Budget from "./Budget.jsx";
+import Expenses from "./Expenses.jsx";
+import AddExpense from "./AddExpense.jsx";
+import Charts from "./Charts.jsx";
+import Summary from "./Summary.jsx";
 
 
 // The App function returns a "container" of components of the website
@@ -25,38 +25,34 @@ function App() {
       "method": "GET"
     })
       .then( res => res.json() )
-      .then( data => setExps( data ) )
+      .then( data => setExps( [ ...data ] ) )
       .catch( err => console.log( err ) );
 
     fetch( "/api/monthly" , {
       "method": "GET"
     })
       .then( res => res.json() )
-      .then( data => setMonthly( data ) )
+      .then( data => setMonthly( [ ...data ] ) )
       .catch( err => console.log( err ) );
   }, [] );
 
   // Nested functions
 
     const changeMonth = ( event ) => {
-      // if ( event.target.value === "12") {
-      //   setMonthIdx( curMonth );
-      // }
-      // else {
         setMonthIdx( event.target.value );
-      // }
     }
 
     // The addExpense function returns a new array with new expense
-    function addExpense( newExp ) {
+    const addExpense = ( newExp ) => {
       setExps( prevExps => [ ...prevExps, newExp ] );
+      console.log( exps );
       window.location.reload();
     }
 
 
 
     // The deleteExpense function returns new array without the deleted expense
-    function deleteExpense( idx ) {
+    const deleteExpense = ( idx ) => {
       setExps( prevExps => prevExps.filter( ( expItem, index ) => index !== idx ) );
       window.location.reload();
     }
@@ -67,18 +63,20 @@ function App() {
   return (
     <div className="container">
       <Header />
-      <Budget
+      <Summary
         curMonth={ curMonth }
         monthSum={ monthly[ monthIdx ] }
-        // monthly={ monthly }
-        monthIdx={ monthIdx }
         changeMonth={ changeMonth }
       />
-      <Detail
+      <Charts
+        monthSum={ monthly[ monthIdx ] }
+        monthIdx={ monthIdx }
+      />
+      <Expenses
         exps={ monthly[ monthIdx ]?.exps }
         onDelete={ deleteExpense }
       />
-      <Expense onAdd={ addExpense } />
+      <AddExpense onAdd={ addExpense } />
 
 
     </div>

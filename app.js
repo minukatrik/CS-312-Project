@@ -62,53 +62,6 @@
 
 
 
-  // app.get( "/api/total", ( req, res ) => {
-  //
-  //   let idx, total = 0;
-  //
-  //   Expense
-  //     .find()
-  //     .then( data => {
-  //       for ( idx = 0; idx < data.length; idx++ ) {
-  //         total += data[ idx ].amount;
-  //       }
-  //       res.json( total );
-  //     });
-  // });
-  //
-  //
-  //
-  // app.get( "/api/categoryTotals", ( req, res ) => {
-  //   let idx, result, titleIdx, summary = [];
-  //
-  //   Expense
-  //     .find()
-  //     .then( data => {
-  //       for ( idx = 0; idx < data.length; idx++ ) {
-  //         result = summary.find( item => item.title === data[ idx ].title );
-  //
-  //         if ( result === undefined ) {
-  //           summary.push({
-  //             title: data[ idx ].title,
-  //             amount: data[ idx ].amount
-  //           });
-  //         }
-  //
-  //         else {
-  //           titleIdx = summary.findIndex( item => item.title === data[ idx ].title );
-  //           summary[ titleIdx ].amount += data[ idx ].amount;
-  //         }
-  //       }
-  //       res.send( summary );
-  //     });
-  // });
-  //
-  //
-  // app.get( "/api/ade", ( req, res ) => {
-  //   const avgDays = 30.4;
-  // });
-
-
   app.get( "/api/monthly", ( req, res ) => {
 
     let monthIdx, dayIdx, idx, result, expDate, monthly = [];
@@ -156,7 +109,7 @@
 
           // Increment totals
           monthly[ monthIdx ].totalSpending += data[ idx ].amount;
-          monthly[ monthIdx ].dailyTotals[ dayIdx ] += data[ idx ].amount;
+          monthly[ monthIdx ].dailyTotals[ dayIdx ].total += data[ idx ].amount;
 
           result = monthly[ monthIdx ].categoryTotals.find( item => item.title === data[ idx ].title );
 
@@ -170,9 +123,7 @@
           if ( result === undefined ) {
             monthly[ monthIdx ].categoryTotals.push({
               title: data[ idx ].title,
-              amount: data[ idx ].amount,
-              // date: data[ idx ].date,
-              // description: data[ idx ].description
+              amount: data[ idx ].amount
             });
           }
 

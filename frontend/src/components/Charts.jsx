@@ -6,17 +6,16 @@ import { colors } from "../colors.js"
 
 function Charts( { monthSum, monthIdx } ) {
 
-  const labels = monthSum?.categoryTotals?.map( cat => cat.title );
-  const amounts = monthSum?.exps?.map( exp => exp.amount );
-  const catAmounts = monthSum?.categoryTotals?.map( cat => cat.amount );
-  const days = new Date( 2024 , monthIdx + 1, 0 ).getDate();
-
+  const categories = monthSum?.categoryTotals.map( cat => cat.title );
+  const catAmounts = monthSum?.categoryTotals.map( cat => cat.amount );
+  const labels = monthSum?.dailyTotals.map( item => item.day );
+  const amounts = monthSum?.dailyTotals.map( item => item.total );
 
   return (
     <div className="charts">
       <Bar
         data={{
-          labels: labels,
+          labels: categories,
           datasets: [
             {
               label: "Category Total",
@@ -27,7 +26,7 @@ function Charts( { monthSum, monthIdx } ) {
       />
       <Pie
         data={{
-          labels: labels,
+          labels: categories,
           datasets: [
             {
               data: catAmounts,
@@ -38,10 +37,10 @@ function Charts( { monthSum, monthIdx } ) {
       />
       <Line
         data={{
-          labels: Array.from( { length: days }, ( _, i ) => i + 1 ),
+          labels: labels,
           datasets: [
             {
-              label: monthSum?.month + " Expense Costs",
+              label: "Days in " + monthSum?.month + " Expense Costs",
               data: amounts
             }
           ]
