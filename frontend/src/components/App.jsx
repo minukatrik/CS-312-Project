@@ -13,7 +13,10 @@ function App() {
 
 
   // Constants
+  const curMonth = new Date().getMonth();
   const [ exps, setExps ] = useState([]);
+  const [ monthly, setMonthly ] = useState([]);
+  const [ monthIdx, setMonthIdx ] = useState( curMonth );
 
 
 
@@ -24,15 +27,30 @@ function App() {
       .then( res => res.json() )
       .then( data => setExps( data ) )
       .catch( err => console.log( err ) );
+
+    fetch( "/api/monthly" , {
+      "method": "GET"
+    })
+      .then( res => res.json() )
+      .then( data => setMonthly( data ) )
+      .catch( err => console.log( err ) );
   }, [] );
 
-
-
   // Nested functions
+
+    const changeMonth = ( event ) => {
+      // if ( event.target.value === "12") {
+      //   setMonthIdx( curMonth );
+      // }
+      // else {
+        setMonthIdx( event.target.value );
+      // }
+    }
 
     // The addExpense function returns a new array with new expense
     function addExpense( newExp ) {
       setExps( prevExps => [ ...prevExps, newExp ] );
+      window.location.reload();
     }
 
 
@@ -40,7 +58,8 @@ function App() {
     // The deleteExpense function returns new array without the deleted expense
     function deleteExpense( idx ) {
       setExps( prevExps => prevExps.filter( ( expItem, index ) => index !== idx ) );
-    };
+      window.location.reload();
+    }
 
 
 
@@ -48,13 +67,20 @@ function App() {
   return (
     <div className="container">
       <Header />
+      <Budget
+        curMonth={ curMonth }
+        monthSum={ monthly[ monthIdx ] }
+        // monthly={ monthly }
+        monthIdx={ monthIdx }
+        changeMonth={ changeMonth }
+      />
       <Detail
-        exps={ exps }
+        exps={ monthly[ monthIdx ]?.exps }
         onDelete={ deleteExpense }
       />
       <Expense onAdd={ addExpense } />
 
-      <Budget />
+
     </div>
   );
 }

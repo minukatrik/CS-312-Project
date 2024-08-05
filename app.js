@@ -111,39 +111,68 @@
 
   app.get( "/api/monthly", ( req, res ) => {
 
-    let monthIdx, idx, result, date, monthly = [];
+    let monthIdx, dayIdx, idx, result, expDate, monthly = [];
     const months = [ "January", "February", "March", "April", "May", "June",
              "July", "August", "September", "October", "November", "December" ];
     const avgDays = 30.4;
+
+    let days //= new Date( 2024 , monthIdx + 1, 0 ).getDate();
 
     for ( monthIdx = 0; monthIdx < months.length; monthIdx++ ) {
       monthly.push({
         month: months[ monthIdx ],
         totalSpending: 0,
         avgDailySpending: 0,
-        categoryTotals: []
+        exps: [],
+        categoryTotals: [],
+        dailyTotals: []
       });
+
+      days = new Date( 2024 , monthIdx + 1, 0 ).getDate();
+
+      for ( dayIdx = 0; dayIdx < days; dayIdx++  ) {
+
+        monthly[ monthIdx ].dailyTotals.push({
+          day: dayIdx + 1,
+          total: 0
+        })
+      }
     }
+
+
 
     Expense
       .find()
       .then( data => {
         for ( idx = 0; idx < data.length; idx++ ) {
 
-          date = data[ idx ].date;
+          // Make date easily accessible ( e.g. [ 2022, 01, 06 ] )
+          expDate = data[ idx ].date;
+          splitDate = expDate.split("-");
 
-          splitDate = date.split("-");
-
+          // Get date indexes
           monthIdx = splitDate[ 1 ] - 1;
+          dayIdx = splitDate[ 2 ] - 1;
 
+          // Increment totals
           monthly[ monthIdx ].totalSpending += data[ idx ].amount;
+          monthly[ monthIdx ].dailyTotals[ dayIdx ] += data[ idx ].amount;
 
           result = monthly[ monthIdx ].categoryTotals.find( item => item.title === data[ idx ].title );
+
+          monthly[ monthIdx ].exps.push({
+            title: data[ idx ].title,
+            amount: data[ idx ].amount,
+            date: data[ idx ].date,
+            description: data[ idx ].description
+          })
 
           if ( result === undefined ) {
             monthly[ monthIdx ].categoryTotals.push({
               title: data[ idx ].title,
-              amount: data[ idx ].amount
+              amount: data[ idx ].amount,
+              // date: data[ idx ].date,
+              // description: data[ idx ].description
             });
           }
 
@@ -196,6 +225,7 @@
       date: date,
       description: description
     })
+      .then( result => res.json( result) )
       .catch( err => console.log( err ) );
   });
 // app.delete('/delete/:id', async(req,res) =>{

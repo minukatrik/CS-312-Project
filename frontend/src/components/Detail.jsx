@@ -5,13 +5,13 @@ import Item from "./Item.jsx";
 
 
 // The Detail function returns the detail section of the website
-function Detail( props ) {
+function Detail( { exps, onDelete } ) {
 
   return (
     <div className="section details">
         <h3>Expenses</h3>
         <div className="details-content">
-          { props.exps.map( ( expItem, index ) => {
+          { exps?.map( ( expItem, index ) => {
             return (
               <Item
                 key={ index }
@@ -22,7 +22,7 @@ function Detail( props ) {
                 newTitle={ expItem.newTitle }
                 date={ expItem.date}
                 description={ expItem.description }
-                onDelete={ props.onDelete }
+                onDelete={ onDelete }
               />
             );
           })}

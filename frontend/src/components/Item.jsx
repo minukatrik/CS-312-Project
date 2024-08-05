@@ -17,13 +17,10 @@ function Item( props ) {
         body: JSON.stringify( props )
       })
         .then( res => res.json() )
-        .then( data => {
-          // console.log( data );
-          // props.onDelete( props.index )
-        })
+        .then( data => props.onDelete( props.index ) )
         .catch( err => console.log( err ) );
 
-      props.onDelete( props.index );
+      // props.onDelete( props.index );
     }
 
   // Return an expense to website

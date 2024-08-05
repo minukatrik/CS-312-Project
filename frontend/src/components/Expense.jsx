@@ -8,7 +8,7 @@ import AddIcon from "@material-ui/icons/Add";
 
 
 // The Expense function returns the expense section of the website
-function Expense( props ) {
+function Expense( { onAdd } ) {
 
 
 
@@ -68,18 +68,16 @@ function Expense( props ) {
           });
         }
 
-        console.log( categories );
-
         fetch( 'http://localhost:8080/submit', {
           method: "POST",
           headers: { "Content-type": "application/json" },
           body: JSON.stringify( exp )
-        });
-          // .then( res => res.json() )
-          // .then( data => setExp( data ) );
+        })
+          .then( res => res.json() )
+          .then( data => setExp( data ) );
 
           // Add expense
-          props.onAdd( exp );
+          onAdd( exp );
 
           // Reset text input
           setExp({
