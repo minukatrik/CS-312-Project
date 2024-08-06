@@ -31,33 +31,31 @@ function AddExpense( { onAdd } ) {
 
   // Nested functions
 
+
+
     // The handleChange function gets current input from form
     const handleChange = ( event ) => {
-
       // Get user input
       const { name, value } = event.target;
-
       // return user input
       setExp( prevExp => { return { ...prevExp, [ name ]: value } } );
     }
+
+
 
     // The submitExp submits the info from the form to the expense array
     const submitExp = ( event ) => {
 
       // Remove white space
       const isWhitespaceString = str => !str.replace( /\s/g, '' ).length;
-
       const { title, amount, date, description } = exp;
-
       // If user filled in required fields
       if ( !isWhitespaceString( title ) && Number( amount ) >= 0
              && date !== "" ) {
-
         if ( !categories.includes( title ) ) {
           setCategories( prevCats => [ ...prevCats, title ] );
           setIsCategory( true );
         }
-
         fetch( 'http://localhost:8080/submit', {
           method: "POST",
           headers: { "Content-type": "application/json" },
@@ -65,28 +63,23 @@ function AddExpense( { onAdd } ) {
         })
           .then( res => res.json() )
           .then( data => setExp( prevExp => { return { ...prevExp, data } } ) );
-
           // Add expense
           onAdd( exp );
-
           // Reset text input
           setExp( prevExp => { return { ...prevExp, title: "", amount: "", date: "", description: "" } } );
-
         event.preventDefault();
       }
-
       // Else
       else {
-
         // Alert user to enter required fields
         alert( "Please correctly enter required fields" );
       }
     }
 
+
+
     const changeDropdown = ( event ) => {
-
       const { checked } = event.target;
-
       // Determine if it's a new category
       if ( checked ) {
         setExp({
@@ -99,10 +92,14 @@ function AddExpense( { onAdd } ) {
       }
     }
 
+
+
     // The expand function sets isExpanded to true
     const expand = () => {
       setExpanded( true );
     }
+
+
 
   // Return expense section
   return (

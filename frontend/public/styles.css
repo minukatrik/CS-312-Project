@@ -60,11 +60,11 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.details {
+.expenses {
     height: auto;
 }
 
-.details-content {
+.expenses-content {
     line-height: 2;
 }
 
@@ -122,19 +122,19 @@ body {
     background-color: #45a049;
 } */
 
-.budget {
+.summary {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
-.budget div {
+.summary div {
     font-size: 24px;
     margin: 5px;
 }
 
-.budget div:last-child {
+.summary div:last-child {
     font-size: 36px;
     font-weight: bold;
 }
@@ -145,7 +145,7 @@ img {
     border-radius: 8px;
 }
 
-.item {
+.expense {
   background: #4CAF50;
   border-radius: 7px;
   box-shadow: 0 2px 5px #ccc;
@@ -155,7 +155,7 @@ img {
   float: left;
 }
 
-.item h1, p {
+.expense h1, p {
   font-size: 1.1em;
   color: #fff;
 }
