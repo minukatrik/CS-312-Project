@@ -1,12 +1,35 @@
 // Imports
-import React from "react";
+import React, { useState, useEffect } from "react";
+import Charts from "./Charts.jsx";
 
-// The Summary function
-function Summary( { curMonth, monthSum, monthIdx, changeMonth } ) {
+// The Budget function
+function Budget( { curMonth, monthSum, monthIdx, changeMonth } ) {
+
+  // const curMonth = new Date().getMonth();
+
+  // const [ monthIdx, setMonthIdx ] = useState( curMonth );
+  // const [ monthly, setMonthly ] = useState([]);
+
+  // useEffect( () => {
+  //   fetch( "/api/monthly" , {
+  //     "method": "GET"
+  //   })
+  //     .then( res => res.json() )
+  //     .then( data => setMonthly( data ) )
+  //     .catch( err => console.log( err ) );
+  // }, [] );
+
+  // const changeMonth = ( event ) => {
+  //   if ( event.target.value === "12") {
+  //     setMonthIdx( curMonth );
+  //   }
+  //   else {
+  //     setMonthIdx( event.target.value );
+  //   }
+  // };
 
   return (
-    <div className="section-summary">
-      <h3>Select Month For Summary</h3>
+    <div className="section budget">
       <select
         className="monthDropdown"
         onChange={ changeMonth }
@@ -28,7 +51,10 @@ function Summary( { curMonth, monthSum, monthIdx, changeMonth } ) {
       <h3>{ monthSum?.month } Summary</h3>
       <div>Total Spending: ${ monthSum?.totalSpending }</div>
       <div>Average Daily Spending: ${ monthSum?.avgDailySpending.toFixed( 2 ) }</div>
-
+      <Charts
+        monthSum={ monthSum }
+        monthIdx={ monthIdx }
+      />
     </div>
   );
 }
@@ -36,4 +62,4 @@ function Summary( { curMonth, monthSum, monthIdx, changeMonth } ) {
 
 
 // Export function
-export default Summary;
+export default Budget;

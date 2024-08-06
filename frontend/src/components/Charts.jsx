@@ -13,39 +13,56 @@ function Charts( { monthSum, monthIdx } ) {
 
   return (
     <div className="charts">
-      <Bar
-        data={{
-          labels: categories,
-          datasets: [
-            {
-              label: "Category Total",
-              data: catAmounts
-            }
-          ]
-        }}
-      />
-      <Pie
-        data={{
-          labels: categories,
-          datasets: [
-            {
-              data: catAmounts,
-              backgroundColor: colors
-            }
-          ]
-        }}
-      />
-      <Line
-        data={{
-          labels: labels,
-          datasets: [
-            {
-              label: "Days in " + monthSum?.month + " Expense Costs",
-              data: amounts
-            }
-          ]
-        }}
-      />
+      <div style={{ display: "flex" }}>
+        <div style={{ flex: 1 }}>
+          <Bar
+            data={{
+              labels: categories,
+              datasets: [
+                {
+                  label: "Category Total",
+                  data: catAmounts
+                }
+              ]
+            }}
+            options={{
+              maintainAspectRatio: false
+            }}
+          />
+        </div>
+        <div style={{ flex: 1 }}>
+          <Pie
+            data={{
+              labels: categories,
+              datasets: [
+                {
+                  data: catAmounts,
+                  backgroundColor: colors
+                }
+              ]
+            }}
+            options={{
+              maintainAspectRatio: false
+            }}
+          />
+        </div>
+      </div>
+      <div style={{ maxWidth: "800px", margin: "0 auto" }}>
+        <Line
+          data={{
+            labels: labels,
+            datasets: [
+              {
+                label: "Days in " + monthSum?.month + " Expense Costs",
+                data: amounts
+              }
+            ]
+          }}
+          options={{
+            maintainAspectRatio: false
+          }}
+        />
+      </div>
     </div>
   );
 
