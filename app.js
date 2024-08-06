@@ -31,8 +31,23 @@
 
   const categoriesSchema = { name: String };
 
+  const loginsSchema = {
+    username: String,
+    password: String,
+    expenses: [ expensesSchema ],
+    categories: [ categoriesSchema ]
+  };
+
   const Expense = mongoose.model( "Expense", expensesSchema );
   const Category = mongoose.model( "Category", categoriesSchema );
+  const Login = mongoose.model( "Login", loginsSchema );
+
+  const defaultExpense = new Expense( {
+    title: "Expense Category",
+    amount: 100,
+    date: "2024-01-01",
+    description: "Welcome to your new expense tracker!"
+  });
 
   const category1 = new Category( { name: "Food" } );
   const category2 = new Category( { name: "Transportation" } );
@@ -40,9 +55,14 @@
   const category4 = new Category( { name: "Utilities" } );
   const category5 = new Category( { name: "Groceries" } );
 
+  const defaultCategories = [ category1, category2, category3, category4, category5 ];
 
-  const defaultCategories = [ category1, category2, category3, category4,
-                                                                    category5 ];
+  const guest = new Login( {
+    username: "Guest",
+    password: "123",
+    expenses: defaultExpense,
+    categories: defaultCategories
+  });
 
 // Get Methods
 
@@ -52,27 +72,28 @@
       .then( data => res.send( data ) );
   });
 
-
-
   app.get( "/api/expenses", ( req, res ) => {
     Expense
       .find()
       .then( data => res.send( data ) );
   });
 
-
+  app.get( "/api/logins", ( req, res ) => {
+    Login
+      .find()
+      .then( data => res.send( data ) )
+  });
 
   app.get( "/api/monthly", ( req, res ) => {
 
-    let monthIdx, dayIdx, idx, result, expDate, monthly = [];
+    let days, monthIdx, dayIdx, idx, result, expDate, monthly = [];
     const months = [ "January", "February", "March", "April", "May", "June",
              "July", "August", "September", "October", "November", "December" ];
     const avgDays = 30.4;
 
-    let days //= new Date( 2024 , monthIdx + 1, 0 ).getDate();
-
     for ( monthIdx = 0; monthIdx < months.length; monthIdx++ ) {
       monthly.push({
+        monthNum: monthIdx,
         month: months[ monthIdx ],
         totalSpending: 0,
         avgDailySpending: 0,
@@ -145,6 +166,32 @@
 
 // Post methods
 
+  app.post( "/login", ( req, res ) => {
+
+    const { username, password } = req.body;
+    let login;
+
+    Login
+      .findOne( { login: login } )
+      .then( ( foundLogin ) => {
+
+        login = foundLogin;
+
+        if ( !login ) {
+          login = new Login ({
+            username: username,
+            password: password,
+            expenses: defaultExpense,
+            categories: defaultCategories
+          });
+
+          login.save();
+        }
+
+        res.json( login );
+      });
+  });
+
   app.post( "/submit", ( req, res ) => {
     const { title, amount, date, description } = req.body;
     const category = new Category( { name: title } );
@@ -179,18 +226,7 @@
       .then( result => res.json( result) )
       .catch( err => console.log( err ) );
   });
-// app.delete('/delete/:id', async(req,res) =>{
-//   const {id} = req.params;
-//   try{
-//     const expense = await Expense.findByIdAndDelete(id);
-//     if(!expense){
-//       return res.status(404).json({message: 'not found expense'});
-//     }
-//     res.status(200).json({message: 'Expense deleted successfully'});
-//   } catch(error){
-//     res.status(500).json({message : error.message});
-//   }
-// });
+
 // OTHER
 
   // Console listening to a port

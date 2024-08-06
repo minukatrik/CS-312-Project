@@ -127,7 +127,8 @@ function AddExpense( { onAdd } ) {
                 />
               );
             })}
-          </select>)}
+          </select>
+          )}
 
           { !isCategory && (
           <input
